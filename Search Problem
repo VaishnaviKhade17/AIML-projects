@@ -1,0 +1,97 @@
+
+# Problem Statement 1:Smart Light Agent 
+is_human_there=input("Is Human present?(yes/no)").lower()
+is_daylight_there=input("Is there sunlight available?(yes/no)").lower()
+
+# Check the condition
+if is_human_there=="yes" and is_daylight_there=="no" :
+    print("Light On")
+
+else:
+    print("Light Off")
+
+# Problem Statement 2:Two-Room Vacuum Cleaner Agent
+#Get the input
+is_roomA_clean=input("Is Room A clean?(clean/dirty):").lower()
+is_roomB_clean=input("Is Room B clean?(clean/dirty):").lower()
+
+#check the condition
+
+if is_roomA_clean=="clean":
+    print("Moving to Room B as Room A is clean")
+    if is_roomB_clean=="dirty":
+        print("Cleaning Room B")
+    else:
+        print("Both the rooms are Clean")
+
+else:
+    print("Cleaning Room A")
+    if is_roomB_clean=="dirty":
+        print("Cleaning Room B")
+    else:
+        print("Both the rooms are Clean")
+
+print("Both the Rooms are Clean")
+
+#Problem Statement 3:8-Puzzle Problem
+from collections import deque
+
+# Goal state
+goal_state = [[1,2,3],
+              [4,5,6],
+              [7,8,0]]   # 0 represents blank
+
+
+# Function to find blank position
+def find_blank(state):
+    for i in range(3):
+        for j in range(3):
+            if state[i][j] == 0:
+                return i, j
+
+
+# Function to generate new states
+def generate_moves(state):
+    x, y = find_blank(state)
+
+    moves = []
+    directions = [(-1,0),(1,0),(0,-1),(0,1)]  # Up, Down, Left, Right
+
+    for dx, dy in directions:
+        nx, ny = x + dx, y + dy
+
+        if 0 <= nx < 3 and 0 <= ny < 3:
+            new_state = [row[:] for row in state]
+            new_state[x][y], new_state[nx][ny] = new_state[nx][ny], new_state[x][y]
+            moves.append(new_state)
+
+    return moves
+
+
+# BFS Algorithm
+def solve_puzzle(initial_state):
+    queue = deque()
+    visited = []
+
+    queue.append((initial_state, 0))
+
+    while queue:
+        state, cost = queue.popleft()
+
+        if state == goal_state:
+            print("Goal reached!")
+            print("Minimum moves:", cost)
+            return
+
+        visited.append(state)
+
+        for move in generate_moves(state):
+            if move not in visited:
+                queue.append((move, cost + 1))
+
+# Initial state
+initial_state = [[1,2,3],
+                 [4,0,6],
+                 [7,5,8]]
+
+solve_puzzle(initial_state)
