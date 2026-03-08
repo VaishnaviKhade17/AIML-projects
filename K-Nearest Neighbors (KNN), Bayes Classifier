@@ -1,0 +1,58 @@
+Code:
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score, precision_score, recall_score
+
+iris = load_iris()
+X = iris.data       # Features
+y = iris.target     # Labels
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+
+print("KNN CLASSIFIER RESULTS")
+
+for k in [3, 5, 7]:
+    knn = KNeighborsClassifier(n_neighbors=k)
+    knn.fit(X_train, y_train)
+    y_pred_knn = knn.predict(X_test)
+
+    accuracy = accuracy_score(y_test, y_pred_knn)
+    precision = precision_score(y_test, y_pred_knn, average='macro')
+    recall = recall_score(y_test, y_pred_knn, average='macro')
+
+    print("k =", k)
+    print("Accuracy :", accuracy)
+    print("Precision:", precision)
+    print("Recall   :", recall)
+    print("----------------------------------")
+
+print("NAIVE BAYES CLASSIFIER RESULTS")
+
+nb = GaussianNB()
+nb.fit(X_train, y_train)
+y_pred_nb = nb.predict(X_test)
+
+accuracy_nb = accuracy_score(y_test, y_pred_nb)
+precision_nb = precision_score(y_test, y_pred_nb, average='macro')
+recall_nb = recall_score(y_test, y_pred_nb, average='macro')
+
+print("Accuracy :", accuracy_nb)
+print("Precision:", precision_nb)
+print("Recall   :", recall_nb)
+
+
+print("----------------------------------")
+print("Result:")
+print("KNN and Naive Bayes classifiers implemented successfully.")
+
