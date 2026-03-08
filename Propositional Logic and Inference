@@ -1,0 +1,37 @@
+Code:
+print("Knowledge Base:")
+print("1. If P then Q")
+print("2. P is True")
+
+# Modus Ponens
+print("\nApplying Modus Ponens:")
+
+P = True
+implication = True   # P -> Q
+
+if P and implication:
+    Q = True
+    print("Result: Q is True (Using Modus Ponens)")
+else:
+    print("Cannot infer Q")
+
+# Resolution Method
+print("\nApplying Resolution:")
+
+P = False
+Q = True
+
+if (P or Q) and (not P):
+    print("Resolution Result: Q is True")
+
+# Satisfiability Check
+print("\nChecking Satisfiability:")
+
+# Expression: (P OR Q) AND (NOT P)
+
+for P in [True, False]:
+    for Q in [True, False]:
+        result = (P or Q) and (not P)
+        print("P =", P, "Q =", Q, "Result =", result)
+
+print("\nIf at least one result is True, the expression is SATISFIABLE.")
