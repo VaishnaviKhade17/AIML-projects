@@ -1,0 +1,78 @@
+# Import libraries
+import pandas as pd
+import numpy as np
+
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+data = pd.read_csv("C:/Users/student/Desktop/Iris.csv")
+
+print("First 5 rows:")
+print(data.head())
+
+data = data.drop("Id", axis=1)
+
+# Features and target
+X = data.drop("Species", axis=1)
+y = data["Species"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+#Train Decision Tree
+
+model = DecisionTreeClassifier(random_state=42)
+
+model.fit(X_train, y_train)
+
+#  Prediction
+
+y_pred = model.predict(X_test)
+
+#  Confusion Matrix
+
+cm = confusion_matrix(y_test, y_pred)
+
+print("\nConfusion Matrix:")
+print(cm)
+
+# Visualization
+sns.heatmap(cm, annot=True, cmap="Blues")
+plt.title("Confusion Matrix")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.show()
+
+# Precision, Recall, F1-score
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+
+# -----------------------------
+# Step 8: Accuracy
+# -----------------------------
+accuracy = accuracy_score(y_test, y_pred)
+print("Test Accuracy:", accuracy)
+
+# -----------------------------
+# Step 9: Overfitting vs Underfitting
+# -----------------------------
+train_pred = model.predict(X_train)
+
+train_accuracy = accuracy_score(y_train, train_pred)
+test_accuracy = accuracy_score(y_test, y_pred)
+
+print("\nTraining Accuracy:", train_accuracy)
+print("Testing Accuracy:", test_accuracy)
+
+if train_accuracy > test_accuracy:
+    print("Model may be Overfitting")
+elif train_accuracy < test_accuracy:
+    print("Model may be Underfitting")
+else:
+    print("Model is Balanced")
